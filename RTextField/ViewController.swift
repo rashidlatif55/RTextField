@@ -17,9 +17,9 @@ class ViewController: UIViewController {
     }
     
     @IBAction func showErrors(_ sender: Any) {
-        self.emailTextField.setError(errorString: "Incorrect E-mail")
-        self.passwordTextField.setError(errorString: "Incorrect Password")
-        print(passwordTextField.frame.width)
+        self.emailTextField.showErrorMessage(errorString: "Incorrect email")
+        self.passwordTextField.showErrorMessage(errorString: "Incorrect Password")
+        
     }
 
 }

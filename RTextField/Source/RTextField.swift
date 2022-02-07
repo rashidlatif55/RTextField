@@ -11,68 +11,70 @@ import UIKit
 class RTextField: UITextField {
     
     //  MARK: - Open variables -
-    
-    @IBInspectable var inactiveHintColor = UIColor.gray {
+
+    //Sets hint color for not focused state
+    @IBInspectable
+    open var inactiveHintColor = UIColor.gray {
         didSet { configureHint() }
     }
-    
-    ///Sets hint color for focused state
+
+    //Sets hint color for focused state
     @IBInspectable
     open var activeHintColor = UIColor.lightGray
-    
-    ///Sets background color for not focused state
-    @IBInspectable var defaultBackgroundColor:UIColor = UIColor.lightGray.withAlphaComponent(0.8) {
+
+    //Sets background color for not focused state
+    @IBInspectable
+    open var defaultBackgroundColor = UIColor.lightGray.withAlphaComponent(0.8) {
         didSet { backgroundColor = defaultBackgroundColor }
     }
-    
-    //    Sets background color for focused state
-    @IBInspectable var focusedBackgroundColor:UIColor = UIColor.lightGray
-    
-    //    Sets border color
+
+    // Sets background color for focused state
     @IBInspectable
-    var borderColor:UIColor = UIColor.lightGray {
+    open var focusedBackgroundColor = UIColor.lightGray
+
+    //Sets border color
+    @IBInspectable
+    open var borderColor = UIColor.lightGray {
         didSet { layer.borderColor = borderColor.cgColor }
     }
-    
-    //    Sets border width
+
+   // Sets border width
     @IBInspectable
-    var borderWidth: CGFloat = 1.0 {
+    open var borderWidth: CGFloat = 1.0 {
         didSet { layer.borderWidth = borderWidth }
     }
-    
-    //    Sets corner radius
+
+    // Sets corner radius
     @IBInspectable
-    var cornerRadius: CGFloat = 11 {
+    open var cornerRadius: CGFloat = 11 {
         didSet { layer.cornerRadius = cornerRadius }
     }
-    
-    //    Sets error color
+
+    //Sets error color
     @IBInspectable
     open var errorColor = UIColor.red {
         didSet { errorLabel.textColor = errorColor }
     }
-    
+
     override open var placeholder: String? {
         set { hintLabel.text = newValue }
         get { return hintLabel.text }
     }
-    
+
     public override var text: String? {
         didSet { updateHint() }
     }
-    
+
     private var isHintVisible = false
     private let hintLabel = UILabel()
     private let errorLabel = UILabel()
-    
+
     private let padding: CGFloat = 16
     private let hintFont = UIFont.systemFont(ofSize: 11)
-    private let eyeImageWidth :CGFloat = 22
-    
-    
+
     //  MARK: Public
-    
-    public func setError(errorString: String) {
+
+    public func showErrorMessage(errorString: String) {
         UIView.animate(withDuration: 0.3) {
             self.layer.borderColor = self.errorColor.cgColor
             self.errorLabel.alpha = 1
@@ -81,7 +83,7 @@ class RTextField: UITextField {
         updateErrorLabelPosition()
         errorLabel.shake(offset: 5)
     }
-    
+
     public func hideError() {
         UIView.animate(withDuration: 0.3) {
             self.errorLabel.alpha = 0
@@ -89,21 +91,9 @@ class RTextField: UITextField {
         errorLabel.text = nil
         updateErrorLabelPosition()
     }
-    
-    //  MARK: Init
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.placeholder = super.placeholder
-        initializeTextField()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        self.placeholder = super.placeholder
-        initializeTextField()
-    }
-    
+
+    //  MARK: Private
+
     private func initializeTextField() {
         //remove the default placeholder
         self.borderStyle = .none
@@ -116,32 +106,165 @@ class RTextField: UITextField {
         configureErrorLabel()
         addObservers()
         applyStyle()
-        
-        resignFirstResponder()
     }
-    
+
     private func addObservers() {
         addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
-    
+
     private func configureTextField() {
-        self.clipsToBounds = true
-        self.clearButtonMode = .whileEditing
+        clearButtonMode = .whileEditing
+        autocorrectionType = .no
+        spellCheckingType = .no
         layer.borderWidth = borderWidth
         layer.cornerRadius = cornerRadius
         hintLabel.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: frame.width, height: frame.height))
-        hintLabel.clipsToBounds = true
         addSubview(hintLabel)
     }
-    
+
     private func configureHint() {
         hintLabel.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.updateHint()
         hintLabel.textColor = inactiveHintColor
     }
-    
+
+    private func updateHint() {
+        if isHintVisible {
+            // Small placeholder
+            self.hintLabel.transform = CGAffineTransform.identity.translatedBy(x: self.padding, y: -self.hintHeight())
+            self.hintLabel.font = self.hintFont
+        } else if self.text?.isEmpty ?? true {
+            // Large placeholder
+            self.hintLabel.transform = CGAffineTransform.identity.translatedBy(x: self.padding, y: 0)
+            self.hintLabel.font = self.font
+        }
+    }
+
+    private func configureErrorLabel() {
+        errorLabel.font = UIFont.systemFont(ofSize: 9)
+        errorLabel.textAlignment = .right
+        errorLabel.textColor = errorColor
+        errorLabel.alpha = 0
+        addSubview(errorLabel)
+    }
+
+    private func activateTextField() {
+        if isHintVisible { return }
+        isHintVisible.toggle()
+
+        UIView.animate(withDuration: 0.3) {
+            self.updateHint()
+            self.hintLabel.textColor = self.activeHintColor
+            self.backgroundColor = self.focusedBackgroundColor
+//            if self.errorLabel.alpha == 0 {
+                self.layer.borderColor = self.borderColor.cgColor
+//            }
+        }
+    }
+
+    private func deactivateTextField() {
+        if !isHintVisible { return }
+        isHintVisible.toggle()
+
+        UIView.animate(withDuration: 0.3) {
+            self.updateHint()
+            self.hintLabel.textColor = self.inactiveHintColor
+            self.backgroundColor = self.defaultBackgroundColor
+            self.layer.borderColor =  self.focusedBackgroundColor.cgColor
+        }
+    }
+
+    private func hintHeight() -> CGFloat {
+        return hintFont.lineHeight - padding / 8
+    }
+
+    private func updateErrorLabelPosition() {
+        let size = errorLabel.sizeThatFits(CGSize(width: frame.width, height: CGFloat.greatestFiniteMagnitude))
+        errorLabel.frame.size = size
+        errorLabel.frame.origin.x = frame.width - size.width
+        errorLabel.frame.origin.y = frame.height + padding / 4
+    }
+
+    @objc private func textFieldDidChange() {
+        UIView.animate(withDuration: 0.2) {
+            self.errorLabel.alpha = 0
+            self.layer.borderColor = self.focusedBackgroundColor.cgColor
+        }
+    }
+
+    //  MARK: UIKit methods
+
+    @discardableResult
+    override open func becomeFirstResponder() -> Bool {
+        //        self.crossButton.isHidden = false
+        self.crossButton.transform = CGAffineTransform.identity
+        hideError()
+        activateTextField()
+        return super.becomeFirstResponder()
+    }
+
+    @discardableResult
+    override open func resignFirstResponder() -> Bool {
+        //        self.crossButton.isHidden = true
+        self.crossButton.transform = CGAffineTransform(scaleX: 0, y: 0)
+        deactivateTextField()
+        return super.resignFirstResponder()
+    }
+
+    override open func textRect(forBounds bounds: CGRect) -> CGRect {
+        let superRect = super.textRect(forBounds: bounds)
+        let rect = CGRect(
+            x: padding,
+            y: hintHeight() + 2,
+            width: superRect.size.width - padding * 1.5,
+            height: superRect.size.height - hintHeight()
+        )
+        return rect
+    }
+
+    override open func editingRect(forBounds bounds: CGRect) -> CGRect {
+        let superRect = super.editingRect(forBounds: bounds)
+        let rect = CGRect(
+            x: padding,
+            y: hintHeight() + 2,
+            width: superRect.size.width - padding * 1.5,
+            height: superRect.size.height - hintHeight()
+        )
+        return rect
+    }
+
+    override open func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+        return textRect(forBounds: bounds)
+    }
+
+    override open func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
+        let superRect = super.clearButtonRect(forBounds: bounds)
+        return superRect.offsetBy(dx: -padding / 2, dy: 0)
+    }
+
+    override open var intrinsicContentSize: CGSize {
+        return CGSize(width: bounds.size.width, height: 64)
+    }
+
+    //  MARK: Init
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.placeholder = super.placeholder
+        initializeTextField()
+        self.resignFirstResponder()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.placeholder = super.placeholder
+        initializeTextField()
+        self.resignFirstResponder()
+    }
+ 
     let crossButton = UIButton(type: .custom)
     let eyeButton = UIButton( type: .custom )
+    private let eyeImageWidth :CGFloat = 22
     
     func applyStyle() {
         self.tintColor = UIColor(red: 94/255, green: 186/255, blue: 187/255, alpha: 1)
@@ -159,25 +282,28 @@ class RTextField: UITextField {
         
         crossButton.setImage( UIImage(named: "cross.icon"), for: .normal )
         crossButton.addTarget( self, action: #selector(crossAction), for: .touchUpInside )
-        crossButton.frame = CGRect( x: -5, y: 0, width: eyeImageWidth, height: eyeImageWidth )
+        crossButton.frame = CGRect( x: -5, y: 0, width: eyeImageWidth, height: self.frame.height )
+        crossButton.imageView?.contentMode = .scaleAspectFit
         
         eyeButton.setImage(UIImage(named: "pass.show.icon"), for: .normal )
         eyeButton.addTarget( self, action: #selector(eyeAction), for: .touchUpInside )
-        eyeButton.frame = CGRect( x: eyeImageWidth, y: 0, width: eyeImageWidth, height: eyeImageWidth )
+        eyeButton.frame = CGRect( x: eyeImageWidth, y: 0, width: eyeImageWidth, height: self.frame.height )
+        eyeButton.imageView?.contentMode = .scaleAspectFit
         
-        let wV = UIView()
+        let rightView = UIView()
         if self.isSecureTextEntry {
-            wV.frame = CGRect( x:0, y:0, width: (eyeImageWidth * 2) + 6, height: eyeImageWidth )
-            wV.addSubview( crossButton )
-            wV.addSubview( eyeButton )
+            rightView.frame = CGRect( x:0, y:0, width: (eyeImageWidth * 2) + 6, height: self.frame.height )
+            rightView.addSubview( crossButton )
+            rightView.addSubview( eyeButton )
         }else {
-            wV.frame = CGRect( x:0, y:0, width: (eyeImageWidth) , height: eyeImageWidth)
-            wV.addSubview( crossButton )
+            rightView.frame = CGRect( x:0, y:0, width: (eyeImageWidth) , height: self.frame.height)
+            rightView.addSubview( crossButton )
         }
         
-        self.rightView = wV
+        self.rightView = rightView
         self.rightViewMode = .always
     }
+    
     
     @objc func crossAction(){
         print("crossAction")
@@ -187,125 +313,6 @@ class RTextField: UITextField {
     @objc func eyeAction(){
         print("eyeAction")
     }
-    
-    private func updateHint() {
-        if isHintVisible {
-            // Small placeholder
-            self.hintLabel.transform = CGAffineTransform.identity.translatedBy(x: self.padding, y: -self.hintHeight())
-            self.hintLabel.font = self.hintFont
-        } else if self.text?.isEmpty ?? true {
-            // Large placeholder
-            self.hintLabel.transform = CGAffineTransform.identity.translatedBy(x: self.padding, y: 0)
-            self.hintLabel.font = self.font
-        }
-    }
-    
-    private func configureErrorLabel() {
-        errorLabel.font = UIFont.systemFont(ofSize: 9)
-        errorLabel.textAlignment = .right
-        errorLabel.textColor = errorColor
-        errorLabel.alpha = 0
-        addSubview(errorLabel)
-    }
-    
-    private func activateTextField() {
-        if isHintVisible { return }
-        isHintVisible.toggle()
-        
-        UIView.animate(withDuration: 0.3) {
-            self.updateHint()
-            self.hintLabel.textColor = self.activeHintColor
-            self.backgroundColor = self.focusedBackgroundColor
-            //            if self.errorLabel.alpha == 0 {
-            self.layer.borderColor = self.borderColor.cgColor
-            //            }
-        }
-    }
-    
-    private func deactivateTextField() {
-        if !isHintVisible { return }
-        isHintVisible.toggle()
-        
-        UIView.animate(withDuration: 0.3) {
-            self.updateHint()
-            self.hintLabel.textColor = self.inactiveHintColor
-            self.backgroundColor = self.defaultBackgroundColor
-            self.layer.borderColor =  self.focusedBackgroundColor.cgColor
-        }
-    }
-    
-    private func hintHeight() -> CGFloat {
-        return hintFont.lineHeight - padding / 8
-    }
-    
-    private func updateErrorLabelPosition() {
-        let size = errorLabel.sizeThatFits(CGSize(width: frame.width, height: CGFloat.greatestFiniteMagnitude))
-        errorLabel.frame.size = size
-        errorLabel.frame.origin.x = frame.width - size.width
-        errorLabel.frame.origin.y = frame.height + padding / 4
-    }
-    
-    @objc private func textFieldDidChange() {
-        UIView.animate(withDuration: 0.2) {
-            self.errorLabel.alpha = 0
-            self.layer.borderColor = self.borderColor.cgColor
-        }
-    }
-    
-    //  MARK: UIKit methods
-    
-    @discardableResult
-    override open func becomeFirstResponder() -> Bool {
-        //        self.crossButton.isHidden = false
-        self.crossButton.transform = CGAffineTransform.identity
-        hideError()
-        activateTextField()
-        return super.becomeFirstResponder()
-    }
-    
-    @discardableResult
-    override open func resignFirstResponder() -> Bool {
-        //        self.crossButton.isHidden = true
-        self.crossButton.transform = CGAffineTransform(scaleX: 0, y: 0)
-        deactivateTextField()
-        return super.resignFirstResponder()
-    }
-    
-    override open func textRect(forBounds bounds: CGRect) -> CGRect {
-        let superRect = super.textRect(forBounds: bounds)
-        let rect = CGRect(
-            x: padding,
-            y: hintHeight() + 2,
-            width: superRect.size.width - padding * 1.5,
-            height: superRect.size.height - hintHeight()
-        )
-        return rect
-    }
-    
-    override open func editingRect(forBounds bounds: CGRect) -> CGRect {
-        let superRect = super.editingRect(forBounds: bounds)
-        let rect = CGRect(
-            x: padding,
-            y: hintHeight() + 2,
-            width: superRect.size.width - padding * 1.5,
-            height: superRect.size.height - hintHeight()
-        )
-        return rect
-    }
-    
-    override open func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-        return textRect(forBounds: bounds)
-    }
-    
-    override open func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
-        let superRect = super.clearButtonRect(forBounds: bounds)
-        return superRect.offsetBy(dx: -padding / 2, dy: 0)
-    }
-    
-    override open var intrinsicContentSize: CGSize {
-        return CGSize(width: bounds.size.width, height: 65)
-    }
-    
     
 }
 

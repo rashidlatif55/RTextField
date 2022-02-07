@@ -20,7 +20,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="iqj-Od-tx7">
                                 <rect key="frame" x="15" y="64" width="384" height="205"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter your email address here Enter your email address hereEnter your email address here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dbc-6G-S6e" customClass="RTextField" customModule="RTextField" customModuleProvider="target">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter your email address here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dbc-6G-S6e" customClass="RTextField" customModule="RTextField" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="384" height="55"/>
                                         <color key="backgroundColor" red="0.1019607931" green="0.1019607931" blue="0.1019607931" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <constraints>
@@ -83,7 +83,7 @@
             <size key="intrinsicContentSize" width="58.5" height="16"/>
         </designable>
         <designable name="Dbc-6G-S6e">
-            <size key="intrinsicContentSize" width="544.5" height="17.5"/>
+            <size key="intrinsicContentSize" width="180.5" height="17.5"/>
         </designable>
     </designables>
     <resources>

@@ -8,8 +8,16 @@
 import UIKit
 
 class ViewController: UIViewController {
-    @IBOutlet private weak var emailTextField:RTextField!
-    @IBOutlet private weak var passwordTextField:RTextField!
+    @IBOutlet private weak var emailTextField:RTextField!{
+        didSet{
+//            emailTextField.isSecureTextField = false
+        }
+    }
+    @IBOutlet private weak var passwordTextField:RTextField!{
+        didSet{
+//            passwordTextField.isSecureTextField = true
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -11,42 +11,36 @@ import UIKit
 class RTextField: UITextField {
     
     //  MARK: - Open variables -
-
+//     var isSecureTextField: Bool = false
+    
     //Sets hint color for not focused state
-    @IBInspectable
-    open var inactiveHintColor = UIColor.gray {
+    @IBInspectable var inactiveHintColor = UIColor.gray {
         didSet { configureHint() }
     }
 
     //Sets hint color for focused state
-    @IBInspectable
-    open var activeHintColor = UIColor.lightGray
+    @IBInspectable  var activeHintColor = UIColor.lightGray
 
     //Sets background color for not focused state
-    @IBInspectable
-    open var defaultBackgroundColor = UIColor.lightGray.withAlphaComponent(0.8) {
+    @IBInspectable  var defaultBackgroundColor = UIColor.lightGray.withAlphaComponent(0.8) {
         didSet { backgroundColor = defaultBackgroundColor }
     }
 
     // Sets background color for focused state
-    @IBInspectable
-    open var focusedBackgroundColor = UIColor.lightGray
+    @IBInspectable var focusedBackgroundColor = UIColor.lightGray
 
     //Sets border color
-    @IBInspectable
-    open var borderColor = UIColor.lightGray {
+    @IBInspectable  var borderColor = UIColor.lightGray {
         didSet { layer.borderColor = borderColor.cgColor }
     }
 
    // Sets border width
-    @IBInspectable
-    open var borderWidth: CGFloat = 1.0 {
+    @IBInspectable var borderWidth: CGFloat = 1.0 {
         didSet { layer.borderWidth = borderWidth }
     }
 
     // Sets corner radius
-    @IBInspectable
-    open var cornerRadius: CGFloat = 11 {
+    @IBInspectable  var cornerRadius: CGFloat = 5 {
         didSet { layer.cornerRadius = cornerRadius }
     }
 
@@ -106,6 +100,7 @@ class RTextField: UITextField {
         configureErrorLabel()
         addObservers()
         applyStyle()
+        rightViewSetup()
     }
 
     private func addObservers() {
@@ -113,9 +108,6 @@ class RTextField: UITextField {
     }
 
     private func configureTextField() {
-        clearButtonMode = .whileEditing
-        autocorrectionType = .no
-        spellCheckingType = .no
         layer.borderWidth = borderWidth
         layer.cornerRadius = cornerRadius
         hintLabel.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: frame.width, height: frame.height))
@@ -188,7 +180,7 @@ class RTextField: UITextField {
     @objc private func textFieldDidChange() {
         UIView.animate(withDuration: 0.2) {
             self.errorLabel.alpha = 0
-            self.layer.borderColor = self.focusedBackgroundColor.cgColor
+            self.layer.borderColor = self.borderColor.cgColor
         }
     }
 
@@ -197,6 +189,7 @@ class RTextField: UITextField {
     @discardableResult
     override open func becomeFirstResponder() -> Bool {
         //        self.crossButton.isHidden = false
+     
         self.crossButton.transform = CGAffineTransform.identity
         hideError()
         activateTextField()
@@ -204,7 +197,7 @@ class RTextField: UITextField {
     }
 
     @discardableResult
-    override open func resignFirstResponder() -> Bool {
+    override func resignFirstResponder() -> Bool {
         //        self.crossButton.isHidden = true
         self.crossButton.transform = CGAffineTransform(scaleX: 0, y: 0)
         deactivateTextField()
@@ -279,7 +272,9 @@ class RTextField: UITextField {
         self.cornerRadius = 5
         self.layer.borderColor = self.focusedBackgroundColor.cgColor
         
-        
+    }
+    
+    func rightViewSetup(){
         crossButton.setImage( UIImage(named: "cross.icon"), for: .normal )
         crossButton.addTarget( self, action: #selector(crossAction), for: .touchUpInside )
         crossButton.frame = CGRect( x: -5, y: 0, width: eyeImageWidth, height: self.frame.height )
@@ -304,14 +299,12 @@ class RTextField: UITextField {
         self.rightViewMode = .always
     }
     
-    
     @objc func crossAction(){
-        print("crossAction")
         self.text = ""
     }
     
     @objc func eyeAction(){
-        print("eyeAction")
+        self.isSecureTextEntry = !isSecureTextEntry
     }
     
 }

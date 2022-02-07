@@ -52,7 +52,7 @@
                                         <rect key="frame" x="0.0" y="150" width="384" height="55"/>
                                         <color key="tintColor" systemColor="systemRedColor"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="tinted" title="Click"/>
+                                        <buttonConfiguration key="configuration" style="tinted" title="Show error"/>
                                         <connections>
                                             <action selector="showErrors:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XFg-Ij-Gt2"/>
                                         </connections>

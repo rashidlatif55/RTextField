@@ -193,6 +193,11 @@ class RTextField: UITextField {
         self.crossButton.transform = CGAffineTransform.identity
         hideError()
         activateTextField()
+        //bring cursor to end of string
+        DispatchQueue.main.async {
+            let endPosition = self.endOfDocument
+            self.selectedTextRange = self.textRange(from: endPosition, to: endPosition)
+        }
         return super.becomeFirstResponder()
     }
 
@@ -278,12 +283,12 @@ class RTextField: UITextField {
     func rightViewSetup(){
         crossButton.setImage( UIImage(named: "cross.icon"), for: .normal )
         crossButton.addTarget( self, action: #selector(crossAction), for: .touchUpInside )
-        crossButton.frame = CGRect( x: -5, y: 0, width: eyeImageWidth, height: self.frame.height )
+        crossButton.frame = CGRect( x: -10, y: 0, width: eyeImageWidth, height: self.frame.height )
         crossButton.imageView?.contentMode = .scaleAspectFit
         
         eyeButton.setImage(UIImage(named: "password.show.icon"), for: .normal )
         eyeButton.addTarget( self, action: #selector(eyeAction), for: .touchUpInside )
-        eyeButton.frame = CGRect( x: eyeImageWidth, y: 0, width: eyeImageWidth, height: self.frame.height )
+        eyeButton.frame = CGRect( x: eyeImageWidth - 5, y: 0, width: eyeImageWidth, height: self.frame.height )
         eyeButton.imageView?.contentMode = .scaleAspectFit
         
         let rightView = UIView()

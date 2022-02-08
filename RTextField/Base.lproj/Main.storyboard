@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="iqj-Od-tx7">
-                                <rect key="frame" x="15" y="64" width="384" height="205"/>
+                                <rect key="frame" x="15" y="64" width="384" height="280"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter your email address here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dbc-6G-S6e" customClass="RTextField" customModule="RTextField" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="384" height="55"/>
@@ -27,7 +27,7 @@
                                             <constraint firstAttribute="height" constant="55" id="hCX-5e-o3G"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="emailAddress" textContentType="email"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                 <real key="value" value="5"/>
@@ -48,8 +48,22 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NED-DY-6yg">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter phone" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JVa-rG-yQZ" customClass="RTextField" customModule="RTextField" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="150" width="384" height="55"/>
+                                        <color key="backgroundColor" red="0.1019607931" green="0.1019607931" blue="0.1019607931" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="55" id="vNU-go-sCD"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="phonePad" textContentType="tel"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NED-DY-6yg">
+                                        <rect key="frame" x="0.0" y="225" width="384" height="55"/>
                                         <color key="tintColor" systemColor="systemRedColor"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="tinted" title="Show error"/>
@@ -71,6 +85,7 @@
                     <connections>
                         <outlet property="emailTextField" destination="Dbc-6G-S6e" id="p73-vi-sjA"/>
                         <outlet property="passwordTextField" destination="9YR-bf-XlT" id="Hd6-pM-DeI"/>
+                        <outlet property="phoneTextField" destination="JVa-rG-yQZ" id="hkM-F5-d7M"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -84,6 +99,9 @@
         </designable>
         <designable name="Dbc-6G-S6e">
             <size key="intrinsicContentSize" width="180.5" height="17.5"/>
+        </designable>
+        <designable name="JVa-rG-yQZ">
+            <size key="intrinsicContentSize" width="73.5" height="17.5"/>
         </designable>
     </designables>
     <resources>

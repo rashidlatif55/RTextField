@@ -1,9 +1,10 @@
 //
 //  CustomTextField.swift
-//  RTextField
-//
-//  Created by Rashid Latif on 04/02/2022.
-//
+// Created by Rashid Latif on 08/02/2022.
+// Email:- rashid.latif93@gmail.com
+// https://stackoverflow.com/users/10383865/rashid-latif
+// https://github.com/rashidlatif55
+ 
 
 import UIKit
 
@@ -11,7 +12,6 @@ import UIKit
 class RTextField: UITextField {
     
     //  MARK: - Open variables -
-//     var isSecureTextField: Bool = false
     
     //Sets hint color for not focused state
     @IBInspectable var inactiveHintColor = UIColor.gray {
@@ -74,6 +74,7 @@ class RTextField: UITextField {
             self.errorLabel.alpha = 1
         }
         errorLabel.text = errorString
+        hintLabel.textColor = .error
         updateErrorLabelPosition()
         errorLabel.shake(offset: 5)
     }
@@ -189,7 +190,6 @@ class RTextField: UITextField {
     @discardableResult
     override open func becomeFirstResponder() -> Bool {
         //        self.crossButton.isHidden = false
-     
         self.crossButton.transform = CGAffineTransform.identity
         hideError()
         activateTextField()
@@ -199,6 +199,7 @@ class RTextField: UITextField {
     @discardableResult
     override func resignFirstResponder() -> Bool {
         //        self.crossButton.isHidden = true
+        hideError()
         self.crossButton.transform = CGAffineTransform(scaleX: 0, y: 0)
         deactivateTextField()
         return super.resignFirstResponder()
@@ -260,15 +261,15 @@ class RTextField: UITextField {
     private let eyeImageWidth :CGFloat = 22
     
     func applyStyle() {
-        self.tintColor = UIColor(red: 94/255, green: 186/255, blue: 187/255, alpha: 1)
-        self.textColor = UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1)
-        self.inactiveHintColor = UIColor(red: 127/255, green: 127/255, blue: 127/255, alpha: 1)
-        self.activeHintColor = UIColor(red: 127/255, green: 127/255, blue: 127/255, alpha: 1)
-        self.focusedBackgroundColor = #colorLiteral(red: 0.1019608006, green: 0.1019608006, blue: 0.1019608006, alpha: 1)
-        self.defaultBackgroundColor = #colorLiteral(red: 0.1019608006, green: 0.1019608006, blue: 0.1019608006, alpha: 1)
-        self.borderColor = UIColor(red: 212/255, green: 108/255, blue: 43/255, alpha: 1)
-        self.errorColor = UIColor.red
-        self.borderWidth = 2
+        self.tintColor = UIColor.tintSecondary
+        self.textColor = UIColor.tintSecondary
+        self.inactiveHintColor = UIColor.tintTertiary
+        self.activeHintColor = UIColor.tintTertiary
+        self.focusedBackgroundColor = .tertiary
+        self.defaultBackgroundColor = .tertiary
+        self.borderColor = UIColor.tintPrimary
+        self.errorColor = UIColor.error
+        self.borderWidth = 1.5
         self.cornerRadius = 5
         self.layer.borderColor = self.focusedBackgroundColor.cgColor
         
@@ -280,7 +281,7 @@ class RTextField: UITextField {
         crossButton.frame = CGRect( x: -5, y: 0, width: eyeImageWidth, height: self.frame.height )
         crossButton.imageView?.contentMode = .scaleAspectFit
         
-        eyeButton.setImage(UIImage(named: "pass.show.icon"), for: .normal )
+        eyeButton.setImage(UIImage(named: "password.show.icon"), for: .normal )
         eyeButton.addTarget( self, action: #selector(eyeAction), for: .touchUpInside )
         eyeButton.frame = CGRect( x: eyeImageWidth, y: 0, width: eyeImageWidth, height: self.frame.height )
         eyeButton.imageView?.contentMode = .scaleAspectFit
@@ -304,7 +305,8 @@ class RTextField: UITextField {
     }
     
     @objc func eyeAction(){
-        self.isSecureTextEntry = !isSecureTextEntry
+        self.isSecureTextEntry.toggle()
+        self.eyeButton.setImage(isSecureTextEntry ? UIImage(named: "password.show.icon") : UIImage(named: "password.hide.icon"), for: .normal)
     }
     
 }

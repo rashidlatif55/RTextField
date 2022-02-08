@@ -8,16 +8,10 @@
 import UIKit
 
 class ViewController: UIViewController {
-    @IBOutlet private weak var emailTextField:RTextField!{
-        didSet{
-//            emailTextField.isSecureTextField = false
-        }
-    }
-    @IBOutlet private weak var passwordTextField:RTextField!{
-        didSet{
-//            passwordTextField.isSecureTextField = true
-        }
-    }
+    
+    @IBOutlet private weak var emailTextField:RTextField!
+    @IBOutlet private weak var passwordTextField:RTextField!
+    @IBOutlet private weak var phoneTextField:RTextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +21,7 @@ class ViewController: UIViewController {
     @IBAction func showErrors(_ sender: Any) {
         self.emailTextField.showErrorMessage(errorString: "Incorrect email")
         self.passwordTextField.showErrorMessage(errorString: "Incorrect Password")
+        self.phoneTextField.showErrorMessage(errorString: "Incorrect phone number")
         
     }
 

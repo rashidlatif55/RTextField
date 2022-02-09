@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C197A2F27B3B34200FC89E7 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C197A2E27B3B34200FC89E7 /* UIView+Extension.swift */; };
 		0C44F37B27B2517500E94B75 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C44F37A27B2517500E94B75 /* UIColor+Extension.swift */; };
 		0CBCD0B227AD44B800B1DB79 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBCD0B127AD44B800B1DB79 /* AppDelegate.swift */; };
 		0CBCD0B427AD44B800B1DB79 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBCD0B327AD44B800B1DB79 /* SceneDelegate.swift */; };
@@ -39,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C197A2E27B3B34200FC89E7 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		0C44F37A27B2517500E94B75 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		0CBCD0AE27AD44B800B1DB79 /* RTextField.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RTextField.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CBCD0B127AD44B800B1DB79 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				0C44F37A27B2517500E94B75 /* UIColor+Extension.swift */,
+				0C197A2E27B3B34200FC89E7 /* UIView+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -284,6 +287,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0CBCD0B627AD44B800B1DB79 /* ViewController.swift in Sources */,
+				0C197A2F27B3B34200FC89E7 /* UIView+Extension.swift in Sources */,
 				0CBCD0B227AD44B800B1DB79 /* AppDelegate.swift in Sources */,
 				0CBCD0BC27AD44B800B1DB79 /* RTextField.xcdatamodeld in Sources */,
 				0C44F37B27B2517500E94B75 /* UIColor+Extension.swift in Sources */,

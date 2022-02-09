@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,11 +19,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="iqj-Od-tx7">
-                                <rect key="frame" x="15" y="64" width="384" height="280"/>
+                                <rect key="frame" x="15" y="64" width="384" height="355"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter your email address here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dbc-6G-S6e" customClass="RTextField" customModule="RTextField" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="384" height="55"/>
-                                        <color key="backgroundColor" red="0.1019607931" green="0.1019607931" blue="0.1019607931" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" name="Tint-Secondary"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="55" id="hCX-5e-o3G"/>
                                         </constraints>
@@ -36,7 +37,7 @@
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9YR-bf-XlT" customClass="RTextField" customModule="RTextField" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="75" width="384" height="55"/>
-                                        <color key="backgroundColor" red="0.1019607931" green="0.1019607931" blue="0.1019607931" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" name="Tint-Secondary"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="55" id="g5k-Ab-bqJ"/>
                                         </constraints>
@@ -50,7 +51,7 @@
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter phone" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JVa-rG-yQZ" customClass="RTextField" customModule="RTextField" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="150" width="384" height="55"/>
-                                        <color key="backgroundColor" red="0.1019607931" green="0.1019607931" blue="0.1019607931" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" name="Tint-Secondary"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="55" id="vNU-go-sCD"/>
                                         </constraints>
@@ -62,8 +63,22 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NED-DY-6yg">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email verification code" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="amL-hm-APx" customClass="OneTimeCodeView" customModule="RTextField" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="225" width="384" height="55"/>
+                                        <color key="backgroundColor" name="Tint-Secondary"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="55" id="Am8-4K-7Dp"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="decimalPad" textContentType="one-time-code"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NED-DY-6yg">
+                                        <rect key="frame" x="0.0" y="300" width="384" height="55"/>
                                         <color key="tintColor" systemColor="systemRedColor"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="tinted" title="Show error"/>
@@ -84,6 +99,7 @@
                     </view>
                     <connections>
                         <outlet property="emailTextField" destination="Dbc-6G-S6e" id="p73-vi-sjA"/>
+                        <outlet property="otpTextField" destination="amL-hm-APx" id="97I-WX-DhD"/>
                         <outlet property="passwordTextField" destination="9YR-bf-XlT" id="Hd6-pM-DeI"/>
                         <outlet property="phoneTextField" destination="JVa-rG-yQZ" id="hkM-F5-d7M"/>
                     </connections>
@@ -103,8 +119,14 @@
         <designable name="JVa-rG-yQZ">
             <size key="intrinsicContentSize" width="73.5" height="17.5"/>
         </designable>
+        <designable name="amL-hm-APx">
+            <size key="intrinsicContentSize" width="137" height="17.5"/>
+        </designable>
     </designables>
     <resources>
+        <namedColor name="Tint-Secondary">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

@@ -102,6 +102,16 @@ class RTextField: UITextField {
         addObservers()
         applyStyle()
         rightViewSetup()
+        
+//        if self.textContentType == .oneTimeCode{
+//            otpLabel.addTapGesture {
+//                self.startCountdown()
+//            }
+//        }
+    }
+    
+    func startCountdown(){
+        
     }
 
     private func addObservers() {
@@ -263,7 +273,10 @@ class RTextField: UITextField {
  
     let crossButton = UIButton(type: .custom)
     let eyeButton = UIButton( type: .custom )
-    private let eyeImageWidth :CGFloat = 22
+    
+//    let otpLabel = UILabel(frame: CGRect.zero)
+   
+    private let buttonsImageWidth :CGFloat = 25
     
     func applyStyle() {
         self.tintColor = UIColor.tintSecondary
@@ -283,23 +296,38 @@ class RTextField: UITextField {
     func rightViewSetup(){
         crossButton.setImage( UIImage(named: "cross.icon"), for: .normal )
         crossButton.addTarget( self, action: #selector(crossAction), for: .touchUpInside )
-        crossButton.frame = CGRect( x: -10, y: 0, width: eyeImageWidth, height: self.frame.height )
+        crossButton.frame = CGRect( x: -10, y: 0, width: buttonsImageWidth, height: self.frame.height )
         crossButton.imageView?.contentMode = .scaleAspectFit
         
         eyeButton.setImage(UIImage(named: "password.show.icon"), for: .normal )
         eyeButton.addTarget( self, action: #selector(eyeAction), for: .touchUpInside )
-        eyeButton.frame = CGRect( x: eyeImageWidth - 5, y: 0, width: eyeImageWidth, height: self.frame.height )
         eyeButton.imageView?.contentMode = .scaleAspectFit
         
+//        otpLabel.text = "Send OTP Code"
+//        otpLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+//        otpLabel.sizeToFit()
+        
+        var viewArray = [UIView]()
+        
         let rightView = UIView()
+        
+        viewArray.append(crossButton)
+        rightView.frame = CGRect( x:0, y:0, width: (buttonsImageWidth) , height: self.frame.height)
+        
         if self.isSecureTextEntry {
-            rightView.frame = CGRect( x:0, y:0, width: (eyeImageWidth * 2) + 6, height: self.frame.height )
-            rightView.addSubview( crossButton )
-            rightView.addSubview( eyeButton )
-        }else {
-            rightView.frame = CGRect( x:0, y:0, width: (eyeImageWidth) , height: self.frame.height)
-            rightView.addSubview( crossButton )
+            viewArray.append(eyeButton)
+            eyeButton.frame = CGRect( x: rightView.frame.width, y: 0, width: buttonsImageWidth, height: self.frame.height )
+            rightView.frame = CGRect( x:0, y:0, width: (eyeButton.frame.width * CGFloat(viewArray.count)) + 5, height: self.frame.height )
         }
+        
+//        //add send otp label and count down as well.
+//        if textContentType == .oneTimeCode{
+//            viewArray.append(otpLabel)
+//            otpLabel.frame = CGRect( x: rightView.frame.width, y: 0, width: otpLabel.frame.width, height: self.frame.height )
+//            rightView.frame = CGRect( x:0, y:0, width: (otpLabel.frame.width + rightView.frame.width) + 5, height: self.frame.height )
+//        }
+        
+        viewArray.forEach { rightView.addSubview($0) }
         
         self.rightView = rightView
         self.rightViewMode = .always
@@ -315,15 +343,36 @@ class RTextField: UITextField {
     }
     
 }
-
-extension UIView {
+ 
+class OneTimeCodeView: RTextField {
+     
+    let otpLabel = UILabel(frame: CGRect.zero)
+   
     
-    func shake(offset: CGFloat = 10) {
-        let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
-        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
-        animation.duration = 0.5
-        animation.values = [-offset, offset, -offset, offset, -offset/2, offset/2, -offset/4, offset/4, offset/4 ]
-        layer.add(animation, forKey: "shake")
+    func configure(countOfDigits: Int = 6) {
+        delegate = self
+        keyboardType = .numberPad
+        self.keyboardType = .asciiCapableNumberPad
+        self.placeholder = "Enter the \(countOfDigits)-digit code"
+        if #available(iOS 12.0, *) {
+            textContentType = .oneTimeCode
+        }
+        otpLabel.text = "Send OTP Code"
+        otpLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        otpLabel.sizeToFit()
+//        viewArray.append(otpLabel)
+        otpLabel.frame = CGRect( x: rightView?.frame.width ?? 0, y: 0, width: otpLabel.frame.width, height: self.frame.height )
+        self.rightView?.addSubview(otpLabel)
+        rightView?.frame = CGRect( x:0, y:0, width: otpLabel.frame.width + (rightView?.frame.width ?? 0) + 5, height: self.frame.height )
+        
     }
 }
 
+extension OneTimeCodeView: UITextFieldDelegate {
+
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let characterCount = textField.text?.count else { return false }
+        return characterCount < 6 || string == ""
+    }
+
+}

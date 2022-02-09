@@ -4,7 +4,7 @@
 // Email:- rashid.latif93@gmail.com
 // https://stackoverflow.com/users/10383865/rashid-latif
 // https://github.com/rashidlatif55
- 
+
 
 import UIKit
 
@@ -17,57 +17,57 @@ class RTextField: UITextField {
     @IBInspectable var inactiveHintColor = UIColor.gray {
         didSet { configureHint() }
     }
-
+    
     //Sets hint color for focused state
     @IBInspectable  var activeHintColor = UIColor.lightGray
-
+    
     //Sets background color for not focused state
     @IBInspectable  var defaultBackgroundColor = UIColor.lightGray.withAlphaComponent(0.8) {
         didSet { backgroundColor = defaultBackgroundColor }
     }
-
+    
     // Sets background color for focused state
     @IBInspectable var focusedBackgroundColor = UIColor.lightGray
-
+    
     //Sets border color
-    @IBInspectable  var borderColor = UIColor.lightGray {
-        didSet { layer.borderColor = borderColor.cgColor }
+    @IBInspectable  var customBorderColor = UIColor.lightGray {
+        didSet { layer.borderColor = customBorderColor.cgColor }
     }
-
-   // Sets border width
-    @IBInspectable var borderWidth: CGFloat = 1.0 {
-        didSet { layer.borderWidth = borderWidth }
+    
+    // Sets border width
+    @IBInspectable var customBorderWidth: CGFloat = 1.0 {
+        didSet { layer.borderWidth = customBorderWidth }
     }
-
+    
     // Sets corner radius
-    @IBInspectable  var cornerRadius: CGFloat = 5 {
-        didSet { layer.cornerRadius = cornerRadius }
+    @IBInspectable  var customCornerRadius: CGFloat = 5 {
+        didSet { layer.cornerRadius = customCornerRadius }
     }
-
+    
     //Sets error color
     @IBInspectable
     open var errorColor = UIColor.red {
         didSet { errorLabel.textColor = errorColor }
     }
-
+    
     override open var placeholder: String? {
         set { hintLabel.text = newValue }
         get { return hintLabel.text }
     }
-
+    
     public override var text: String? {
         didSet { updateHint() }
     }
-
+    
     private var isHintVisible = false
     private let hintLabel = UILabel()
     private let errorLabel = UILabel()
-
+    
     private let padding: CGFloat = 16
     private let hintFont = UIFont.systemFont(ofSize: 11)
-
+    
     //  MARK: Public
-
+    
     public func showErrorMessage(errorString: String) {
         UIView.animate(withDuration: 0.3) {
             self.layer.borderColor = self.errorColor.cgColor
@@ -78,7 +78,7 @@ class RTextField: UITextField {
         updateErrorLabelPosition()
         errorLabel.shake(offset: 5)
     }
-
+    
     public func hideError() {
         UIView.animate(withDuration: 0.3) {
             self.errorLabel.alpha = 0
@@ -86,9 +86,9 @@ class RTextField: UITextField {
         errorLabel.text = nil
         updateErrorLabelPosition()
     }
-
+    
     //  MARK: Private
-
+    
     private func initializeTextField() {
         //remove the default placeholder
         self.borderStyle = .none
@@ -102,35 +102,26 @@ class RTextField: UITextField {
         addObservers()
         applyStyle()
         rightViewSetup()
-        
-//        if self.textContentType == .oneTimeCode{
-//            otpLabel.addTapGesture {
-//                self.startCountdown()
-//            }
-//        }
     }
     
-    func startCountdown(){
-        
-    }
-
+    
     private func addObservers() {
         addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
-
+    
     private func configureTextField() {
-        layer.borderWidth = borderWidth
-        layer.cornerRadius = cornerRadius
+        layer.borderWidth = customBorderWidth
+        layer.cornerRadius = customCornerRadius
         hintLabel.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: frame.width, height: frame.height))
         addSubview(hintLabel)
     }
-
+    
     private func configureHint() {
         hintLabel.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.updateHint()
         hintLabel.textColor = inactiveHintColor
     }
-
+    
     private func updateHint() {
         if isHintVisible {
             // Small placeholder
@@ -142,7 +133,7 @@ class RTextField: UITextField {
             self.hintLabel.font = self.font
         }
     }
-
+    
     private func configureErrorLabel() {
         errorLabel.font = UIFont.systemFont(ofSize: 9)
         errorLabel.textAlignment = .right
@@ -150,25 +141,25 @@ class RTextField: UITextField {
         errorLabel.alpha = 0
         addSubview(errorLabel)
     }
-
+    
     private func activateTextField() {
         if isHintVisible { return }
         isHintVisible.toggle()
-
+        
         UIView.animate(withDuration: 0.3) {
             self.updateHint()
             self.hintLabel.textColor = self.activeHintColor
             self.backgroundColor = self.focusedBackgroundColor
-//            if self.errorLabel.alpha == 0 {
-                self.layer.borderColor = self.borderColor.cgColor
-//            }
+            //            if self.errorLabel.alpha == 0 {
+            self.layer.borderColor = self.customBorderColor.cgColor
+            //            }
         }
     }
-
+    
     private func deactivateTextField() {
         if !isHintVisible { return }
         isHintVisible.toggle()
-
+        
         UIView.animate(withDuration: 0.3) {
             self.updateHint()
             self.hintLabel.textColor = self.inactiveHintColor
@@ -176,27 +167,27 @@ class RTextField: UITextField {
             self.layer.borderColor =  self.focusedBackgroundColor.cgColor
         }
     }
-
+    
     private func hintHeight() -> CGFloat {
         return hintFont.lineHeight - padding / 8
     }
-
+    
     private func updateErrorLabelPosition() {
         let size = errorLabel.sizeThatFits(CGSize(width: frame.width, height: CGFloat.greatestFiniteMagnitude))
         errorLabel.frame.size = size
         errorLabel.frame.origin.x = frame.width - size.width
         errorLabel.frame.origin.y = frame.height + padding / 4
     }
-
+    
     @objc private func textFieldDidChange() {
         UIView.animate(withDuration: 0.2) {
             self.errorLabel.alpha = 0
-            self.layer.borderColor = self.borderColor.cgColor
+            self.layer.borderColor = self.customBorderColor.cgColor
         }
     }
-
+    
     //  MARK: UIKit methods
-
+    
     @discardableResult
     override open func becomeFirstResponder() -> Bool {
         //        self.crossButton.isHidden = false
@@ -210,7 +201,7 @@ class RTextField: UITextField {
         }
         return super.becomeFirstResponder()
     }
-
+    
     @discardableResult
     override func resignFirstResponder() -> Bool {
         //        self.crossButton.isHidden = true
@@ -219,7 +210,7 @@ class RTextField: UITextField {
         deactivateTextField()
         return super.resignFirstResponder()
     }
-
+    
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
         let superRect = super.textRect(forBounds: bounds)
         let rect = CGRect(
@@ -230,7 +221,7 @@ class RTextField: UITextField {
         )
         return rect
     }
-
+    
     override open func editingRect(forBounds bounds: CGRect) -> CGRect {
         let superRect = super.editingRect(forBounds: bounds)
         let rect = CGRect(
@@ -241,41 +232,39 @@ class RTextField: UITextField {
         )
         return rect
     }
-
+    
     override open func placeholderRect(forBounds bounds: CGRect) -> CGRect {
         return textRect(forBounds: bounds)
     }
-
+    
     override open func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
         let superRect = super.clearButtonRect(forBounds: bounds)
         return superRect.offsetBy(dx: -padding / 2, dy: 0)
     }
-
+    
     override open var intrinsicContentSize: CGSize {
         return CGSize(width: bounds.size.width, height: 64)
     }
-
+    
     //  MARK: Init
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.placeholder = super.placeholder
         initializeTextField()
         self.resignFirstResponder()
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.placeholder = super.placeholder
         initializeTextField()
         self.resignFirstResponder()
     }
- 
+    
     let crossButton = UIButton(type: .custom)
     let eyeButton = UIButton( type: .custom )
     
-//    let otpLabel = UILabel(frame: CGRect.zero)
-   
     private let buttonsImageWidth :CGFloat = 25
     
     func applyStyle() {
@@ -285,10 +274,10 @@ class RTextField: UITextField {
         self.activeHintColor = UIColor.tintTertiary
         self.focusedBackgroundColor = .tertiary
         self.defaultBackgroundColor = .tertiary
-        self.borderColor = UIColor.tintPrimary
+        self.customBorderColor = UIColor.tintPrimary
         self.errorColor = UIColor.error
-        self.borderWidth = 1.5
-        self.cornerRadius = 5
+        self.customBorderWidth = 1.5
+        self.customCornerRadius = 5
         self.layer.borderColor = self.focusedBackgroundColor.cgColor
         
     }
@@ -303,10 +292,6 @@ class RTextField: UITextField {
         eyeButton.addTarget( self, action: #selector(eyeAction), for: .touchUpInside )
         eyeButton.imageView?.contentMode = .scaleAspectFit
         
-//        otpLabel.text = "Send OTP Code"
-//        otpLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-//        otpLabel.sizeToFit()
-        
         var viewArray = [UIView]()
         
         let rightView = UIView()
@@ -319,14 +304,6 @@ class RTextField: UITextField {
             eyeButton.frame = CGRect( x: rightView.frame.width, y: 0, width: buttonsImageWidth, height: self.frame.height )
             rightView.frame = CGRect( x:0, y:0, width: (eyeButton.frame.width * CGFloat(viewArray.count)) + 5, height: self.frame.height )
         }
-        
-//        //add send otp label and count down as well.
-//        if textContentType == .oneTimeCode{
-//            viewArray.append(otpLabel)
-//            otpLabel.frame = CGRect( x: rightView.frame.width, y: 0, width: otpLabel.frame.width, height: self.frame.height )
-//            rightView.frame = CGRect( x:0, y:0, width: (otpLabel.frame.width + rightView.frame.width) + 5, height: self.frame.height )
-//        }
-        
         viewArray.forEach { rightView.addSubview($0) }
         
         self.rightView = rightView
@@ -343,13 +320,19 @@ class RTextField: UITextField {
     }
     
 }
- 
+
 class OneTimeCodeView: RTextField {
-     
+    
     let otpLabel = UILabel(frame: CGRect.zero)
-   
+    var countOfDigits = 6
+    var didEnterLastDigit: ((String) -> Void)?
+    var didTapToResendOTP: (() -> Void)?
+    
+    var countDownTimer : Timer?
+    var count = 60
     
     func configure(countOfDigits: Int = 6) {
+        self.countOfDigits = countOfDigits
         delegate = self
         keyboardType = .numberPad
         self.keyboardType = .asciiCapableNumberPad
@@ -357,22 +340,82 @@ class OneTimeCodeView: RTextField {
         if #available(iOS 12.0, *) {
             textContentType = .oneTimeCode
         }
-        otpLabel.text = "Send OTP Code"
+        otpLabel.text = " Get OTP code  "
         otpLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         otpLabel.sizeToFit()
-//        viewArray.append(otpLabel)
+        
+        
+        //        viewArray.append(otpLabel)
         otpLabel.frame = CGRect( x: rightView?.frame.width ?? 0, y: 0, width: otpLabel.frame.width, height: self.frame.height )
         self.rightView?.addSubview(otpLabel)
         rightView?.frame = CGRect( x:0, y:0, width: otpLabel.frame.width + (rightView?.frame.width ?? 0) + 5, height: self.frame.height )
+        addTarget(self, action: #selector(textChanged), for: .editingChanged)
         
+        //add action to resend
+        otpLabel.addTapGesture {
+            self.didTapToResendOTP?()
+            self.startCountdown()
+        }
     }
+    
+    @objc
+    private func textChanged() {
+        guard let text = self.text, text.count <= countOfDigits else { return }
+        
+        if text.count == countOfDigits {
+            didEnterLastDigit?(text)
+        }
+    }
+    
+    deinit {
+        countDownTimer?.invalidate()
+        countDownTimer = nil
+    }
+    
+    
+    func startCountdown(){
+        countDownTimer?.invalidate()
+        self.otpLabel.isUserInteractionEnabled = false
+        count = 60
+        Timer.scheduledTimer(withTimeInterval: TimeInterval(count), repeats: false) {
+            [weak self]timer in
+            print(timer)
+            self?.otpLabel.isUserInteractionEnabled = true
+        }
+        self.attributedTimer(count: count)
+        countDownTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
+    }
+    
+    @objc func update() {
+        if(count > 0) {
+            count -= 1
+            self.attributedTimer(count: count)
+            self.otpLabel.isUserInteractionEnabled = false
+        } else{
+            countDownTimer?.invalidate()
+            self.otpLabel.text = "Resend"
+            self.otpLabel.font = .boldSystemFont(ofSize: 17)
+            self.otpLabel.textColor = .tintPrimary
+            self.otpLabel.isUserInteractionEnabled = true
+        }
+    }
+    
+    func attributedTimer(count:Int) {
+        let attributedString = NSMutableAttributedString(string: "Resend in\(count)sec", attributes: [
+            .font: UIFont.boldSystemFont(ofSize: 11),
+            .foregroundColor: UIColor.tintPrimary.withAlphaComponent(0.85)
+        ])
+        attributedString.addAttribute(.foregroundColor, value: UIColor.tintSecondary, range: NSRange(location: 0, length: 9))
+        otpLabel.attributedText = attributedString
+    }
+    
 }
 
 extension OneTimeCodeView: UITextFieldDelegate {
-
+    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         guard let characterCount = textField.text?.count else { return false }
-        return characterCount < 6 || string == ""
+        return characterCount < countOfDigits || string == ""
     }
-
+    
 }
